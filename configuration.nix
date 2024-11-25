@@ -53,15 +53,11 @@
 # Configure i3
 	services.xserver = {
 		enable = true;
-
-    displayManager = false;
-
 		windowManager.i3 = {
 			enable = true;
 			extraPackages = with pkgs; [
 				dmenu #
         i3status # gives you the default i3 status bar
-				i3lock #default i3 screen locker
 			];
 		};
 	};
@@ -91,7 +87,7 @@
 	users.users.daniel = {
 		isNormalUser = true;
 		description = "Daniel";
-		extraGroups = [ "networkmanager" "wheel" "audio"];
+		extraGroups = [ "networkmanager" "wheel" "audio", "docker"];
 		packages = with pkgs; [];
 	};
 
@@ -137,7 +133,7 @@
 			slack			# Salk
 			google-chrome		# Browser
 			spotify			# Music
-			docker-compose		# Containers
+      docker-compose		# Containers
 			];
 
 # Some programs need SUID wrappers, can be configured further or are
@@ -161,10 +157,14 @@
 	services.openssh.enable = true;
 
 # Open ports in the firewall.
-# networking.firewall.allowedTCPPorts = [ ... ];
-# networking.firewall.allowedUDPPorts = [ ... ];
-# Or disable the firewall altogether.
-# networking.firewall.enable = false;
+networking.firewall = {
+  enable = true;
+  allowedTCPPorts = [ 80 443 ];
+  allowedUDPPortRanges = [
+    { from = 4000; to = 4007; }
+    { from = 8000; to = 8010; }
+  ];
+};
 
 # This value determines the NixOS release from which the default
 # settings for stateful data, like file locations and database versions
